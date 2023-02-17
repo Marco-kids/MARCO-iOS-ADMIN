@@ -19,6 +19,7 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @IBOutlet weak var tableView: UITableView!
     var locations: [ARLocation] = []
     let network = Network.shared
+    let refreshControl = UIRefreshControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +30,8 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
         resetButton.clipsToBounds = true
         saveButton.layer.cornerRadius = saveButton.layer.frame.height / 2
         saveButton.clipsToBounds = true
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+        tableView.addSubview(refreshControl)
     }
     
     // MARK: TableView delegate methods
@@ -48,6 +51,10 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
         performSegue(withIdentifier: "loadSegue", sender: indexPath)
     }
     
+    @objc func refresh(_ sender: AnyObject) {
+        network.getLocations()
+    }
+    
     // MARK: UIButtons
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -63,6 +70,7 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: Protocol Methods
     
     func loadedData(locations: [ARLocation]) {
+        refreshControl.endRefreshing()
         self.locations = locations
         self.tableView.reloadData()
     }
