@@ -8,7 +8,14 @@
 import Foundation
 
 struct ARLocation: Decodable {
+    
     let nombre: String
     let screenshot: String
     let ARWorldMap: String
+    var locationPath: URL?
+    
+    private enum CodingKeys: String, CodingKey {
+        case nombre, screenshot, ARWorldMap
+    }
+
 }
