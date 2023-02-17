@@ -15,15 +15,14 @@ import CoreData
 class ARViewController: UIViewController, ARSessionDelegate {
     
     @IBOutlet weak var saveButton: UIButton!
-    @IBOutlet weak var loadButton: UIButton!
     @IBOutlet weak var sessionInfoLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet var arView: ARView!
     
     var model = Entity()
+    var flagLoading: Bool?
+    var location: ARLocation?
     let network = Network.shared
-    var anchorMetaData = Set<UUID>()
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,23 +30,25 @@ class ARViewController: UIViewController, ARSessionDelegate {
         let config = ARWorldTrackingConfiguration()
         config.planeDetection = [.horizontal]
         arView.session.run(config)
+        arView.debugOptions = [ .showFeaturePoints ]
         arView.session.delegate = self
         // Loads sample model (USDZ)
         self.model = try! Entity.load(named: "toy_drummer")
         // Gesture recognizer config
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         arView.addGestureRecognizer(tapGesture)
-        // Config buttons
-        saveButton.layer.cornerRadius = 10
-        loadButton.layer.cornerRadius = 10
-        if mapDataFromFile != nil {
-            self.loadButton.isHidden = false
-        }
+        // Style buttons
+        saveButton.layer.cornerRadius = saveButton.layer.frame.height / 2
+        saveButton.clipsToBounds = true
         saveButton.isEnabled = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if (location != nil) {
+            self.saveButton.isEnabled = false
+            self.load()
+        }
     }
 
     // MARK: - Add AnchorEntity to arView
@@ -68,64 +69,25 @@ class ARViewController: UIViewController, ARSessionDelegate {
     
     // MARK: - Persistence: Saving and Loading
     
-    @IBAction func loadButton(_ sender: Any) {
-//        self.network.getARWorldMap()
-//        // Load screenshot on screen
-//        do {
-//            let items = try context.fetch(Screenshot.fetchRequest())
-//            DispatchQueue.main.async {
-//                self.imageView.image = UIImage(data: items.last!.screenshot!)
-//                self.imageView.isHidden = false
-//            }
-//        } catch {
-//            print("Unable to load Screenshot")
-//        }
-//        // Load world map to scene
-//        let worldMap: ARWorldMap = {
-//            guard let data = mapDataFromFile
-//                else { fatalError("Map data should already be verified to exist before Load button is enabled.") }
-//            do {
-//                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
-//                    else { fatalError("No ARWorldMap in archive.") }
-//                return worldMap
-//            } catch {
-//                fatalError("Can't unarchive ARWorldMap from file data: \(error)")
-//            }
-//        }()
-//        // Reset arView to loaded state
-//        let configuration = self.defaultConfiguration // this app's standard world tracking settings
-//        configuration.initialWorldMap = worldMap
-//        arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
-//        self.isRelocalizingMap = true
-        self.loadAltern()
-    }
-    
-    private func loadAltern() {
-        let urlS = "http://192.168.1.236:8080/" + self.network.locations.first!.screenshot
+    private func load() {
+        let urlS = Params.baseURL + self.location!.screenshot
         let url = URL(string: urlS)
-        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-        imageView.image = UIImage(data: data!)
+        let dataImage = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+        imageView.image = UIImage(data: dataImage!)
         imageView.isHidden = false
 
-//        if self.network.downloadedData.isEmpty {
-//            return
-//        }
-        
-        var data2 = Data()
+        var data = Data()
         let fileManager = FileManager.default
         let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-            // process files
-            data2 = try Data(contentsOf: fileURLs.last!)
-            print(fileURLs)
+            data = try Data(contentsOf: (location?.locationPath!)!)
         } catch {
             print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
         
         let worldMap: ARWorldMap = {
             do {
-                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data2)
+                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
                 else { fatalError("No ARWorldMap in archive.") }
                 return worldMap
             } catch {
@@ -140,33 +102,27 @@ class ARViewController: UIViewController, ARSessionDelegate {
     }
     
     @IBAction func saveButton(_ sender: Any) {
+        // Display alert
+        self.nameLocationAlert()
+    }
+    
+    func saveToServer(name: String) {
         // Deactivate save button
         self.saveButton.isEnabled = false
         // Save screenshot
         arView.snapshot(saveToHDR: false) { image in
             let param1 = image
-            // Compress the image
-            let compressedImage = UIImage(data: (image?.pngData())!)
-            // Save in CoreData
-            let newImage = Screenshot(context: self.context)
-            newImage.screenshot = compressedImage?.pngData()
-            do {
-                try self.context.save()
-            } catch {
-                print("Unable to save image into CoreData")
-            }
             // Save world map
             self.arView.session.getCurrentWorldMap { worldMap, error in
                 guard let map = worldMap
                     else { self.showAlert(title: "Can't get current world map", message: error!.localizedDescription); return }
-                // Add a snapshot image indicating where the map was captured.
-                // Capture Screenshot
                 do {
                     let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
                     try data.write(to: self.mapSaveURL, options: [.atomic])
-                    self.network.uploadImage(image1: param1!, arWorldMap: data)
+                    self.network.uploadLocation(name: name, image1: param1!, arWorldMap: data)
                     DispatchQueue.main.async {
-                        self.loadButton.isEnabled = true
+                        self.navigationController?.popViewController(animated: true)
+                        self.dismiss(animated: true, completion: nil)
                     }
                 } catch {
                     fatalError("Can't save map: \(error.localizedDescription)")
@@ -187,11 +143,6 @@ class ARViewController: UIViewController, ARSessionDelegate {
             fatalError("Can't get file save URL: \(error.localizedDescription)")
         }
     }()
-    
-    // Called opportunistically to verify that map data can be loaded from filesystem.
-    var mapDataFromFile: Data? {
-        return try? Data(contentsOf: mapSaveURL)
-    }
     
     // MARK: - ARSessionDelegate
     
@@ -214,27 +165,58 @@ class ARViewController: UIViewController, ARSessionDelegate {
         return configuration
     }
     
+    var prevState: Bool?
+    
     // This switch can be modified to just detect the space in MARCO KIDS main app
     private func updateSessionInfoLabel(for frame: ARFrame, trackingState: ARCamera.TrackingState) {
         // Update the UI to provide feedback on the state of the AR experience.
         let message: String
         imageView.isHidden = true
+        if (prevState == true && trackingState == .normal) {
+            locationDetectedAlert()
+        }
         switch (trackingState, frame.worldMappingStatus) {
         case (.normal, .mapped),
              (.normal, .extending):
             message = "Tap 'Save Experience' to save the current map."
             self.saveButton.isEnabled = true
-        case (.normal, _) where mapDataFromFile != nil && !isRelocalizingMap:
+            prevState = false
+        case (.normal, _) where flagLoading != nil && !isRelocalizingMap:
             message = "Move around to map the environment or tap 'Load Experience' to load a saved experience."
-        case (.normal, _) where mapDataFromFile == nil:
+            prevState = false
+        case (.normal, _) where flagLoading == nil:
             message = "Move around to map the environment."
+            prevState = false
         case (.limited(.relocalizing), _) where isRelocalizingMap:
             message = "Move your device to the location shown in the image."
             imageView.isHidden = false
+            prevState = true
         default:
             message = trackingState.localizedFeedback
+            prevState = false
         }
         sessionInfoLabel.text = message
+    }
+    
+    // MARK: Alerts
+    
+    func nameLocationAlert() {
+        let alertController = UIAlertController(title: "Agrega un nombre a la ubicación agregada", message: "", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Guardar", style: .default, handler: { alert -> Void in
+            let textField = alertController.textFields![0] as UITextField
+            self.saveToServer(name: textField.text ?? "Default Name")
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: nil))
+        alertController.addTextField(configurationHandler: {(textField : UITextField!) -> Void in
+            textField.placeholder = "Escribe el nombre aquí"
+        })
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func locationDetectedAlert() {
+        let alertController = UIAlertController(title: "Zona detectada correctamente.", message: "", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
 
 }

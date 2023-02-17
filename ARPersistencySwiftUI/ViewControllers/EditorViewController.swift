@@ -44,6 +44,10 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "loadSegue", sender: indexPath)
+    }
+    
     // MARK: UIButtons
     
     @IBAction func saveButton(_ sender: UIButton) {
@@ -61,6 +65,16 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func loadedData(locations: [ARLocation]) {
         self.locations = locations
         self.tableView.reloadData()
+    }
+    
+    // MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "loadSegue"{
+            let destination = segue.destination as! ARViewController
+            let indexPath = sender as! IndexPath
+            destination.location = self.locations[indexPath.row]
+        }
     }
 
 }
