@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct ARLocation: Decodable {
+    let nombre: String
+    let screenshot: String
+    let ARWorldMap: String
+}
