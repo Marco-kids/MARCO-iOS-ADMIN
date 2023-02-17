@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		FC11653F299B527000FE2FAF /* CoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FC11653D299B527000FE2FAF /* CoreData.xcdatamodeld */; };
 		FC116548299B556600FE2FAF /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC116547299B556600FE2FAF /* Utilities.swift */; };
+		FC1F7BAF299C783C00070BC8 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1F7BAE299C783C00070BC8 /* Network.swift */; };
+		FC1F7BB2299C7A7800070BC8 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = FC1F7BB1299C7A7800070BC8 /* Alamofire */; };
+		FC1F7BB5299C8A2B00070BC8 /* ARLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC1F7BB4299C8A2B00070BC8 /* ARLocation.swift */; };
 		FCB1BEFC29946D28000EDF28 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB1BEFB29946D28000EDF28 /* AppDelegate.swift */; };
 		FCB1BEFE29946D28000EDF28 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB1BEFD29946D28000EDF28 /* ContentView.swift */; };
 		FCB1BF0029946D28000EDF28 /* Experience.rcproject in Sources */ = {isa = PBXBuildFile; fileRef = FCB1BEFF29946D28000EDF28 /* Experience.rcproject */; };
@@ -18,11 +21,16 @@
 		FCB1BF1229947476000EDF28 /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCB1BF1129947476000EDF28 /* ARViewController.swift */; };
 		FCB1BF1429947542000EDF28 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FCB1BF1329947542000EDF28 /* Main.storyboard */; };
 		FCB1BF16299477E7000EDF28 /* toy_drummer.usdz in Resources */ = {isa = PBXBuildFile; fileRef = FCB1BF15299477E7000EDF28 /* toy_drummer.usdz */; };
+		FCBE2609299F137B00EAD292 /* EditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBE2608299F137B00EAD292 /* EditorViewController.swift */; };
+		FCBE260D299F153500EAD292 /* EditorTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBE260C299F153500EAD292 /* EditorTableViewCell.swift */; };
+		FCBE260F299F2E6900EAD292 /* Params.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCBE260E299F2E6900EAD292 /* Params.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FC11653E299B527000FE2FAF /* CoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreData.xcdatamodel; sourceTree = "<group>"; };
 		FC116547299B556600FE2FAF /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		FC1F7BAE299C783C00070BC8 /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		FC1F7BB4299C8A2B00070BC8 /* ARLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARLocation.swift; sourceTree = "<group>"; };
 		FCB1BEF829946D28000EDF28 /* ARPersistencySwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARPersistencySwiftUI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCB1BEFB29946D28000EDF28 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FCB1BEFD29946D28000EDF28 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -33,6 +41,9 @@
 		FCB1BF1129947476000EDF28 /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
 		FCB1BF1329947542000EDF28 /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		FCB1BF15299477E7000EDF28 /* toy_drummer.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = toy_drummer.usdz; sourceTree = "<group>"; };
+		FCBE2608299F137B00EAD292 /* EditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorViewController.swift; sourceTree = "<group>"; };
+		FCBE260C299F153500EAD292 /* EditorTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorTableViewCell.swift; sourceTree = "<group>"; };
+		FCBE260E299F2E6900EAD292 /* Params.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Params.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,12 +51,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC1F7BB2299C7A7800070BC8 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC1F7BAD299C508900070BC8 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F7BAE299C783C00070BC8 /* Network.swift */,
+				FCBE260E299F2E6900EAD292 /* Params.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		FC1F7BB3299C8A1800070BC8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FC1F7BB4299C8A2B00070BC8 /* ARLocation.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		FCB1BEEF29946D28000EDF28 = {
 			isa = PBXGroup;
 			children = (
@@ -65,8 +94,11 @@
 		FCB1BEFA29946D28000EDF28 /* ARPersistencySwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				FC1F7BB3299C8A1800070BC8 /* Model */,
 				FCB1BF0D299473DA000EDF28 /* Storyboards */,
 				FCB1BF0E299473E6000EDF28 /* ViewControllers */,
+				FCBE260B299F151C00EAD292 /* TableViewCells */,
+				FC1F7BAD299C508900070BC8 /* Network */,
 				FCB1BEFB29946D28000EDF28 /* AppDelegate.swift */,
 				FCB1BEFD29946D28000EDF28 /* ContentView.swift */,
 				FCB1BEFF29946D28000EDF28 /* Experience.rcproject */,
@@ -98,10 +130,19 @@
 		FCB1BF0E299473E6000EDF28 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				FCBE2608299F137B00EAD292 /* EditorViewController.swift */,
 				FCB1BF1129947476000EDF28 /* ARViewController.swift */,
 				FC116547299B556600FE2FAF /* Utilities.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		FCBE260B299F151C00EAD292 /* TableViewCells */ = {
+			isa = PBXGroup;
+			children = (
+				FCBE260C299F153500EAD292 /* EditorTableViewCell.swift */,
+			);
+			path = TableViewCells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +161,9 @@
 			dependencies = (
 			);
 			name = ARPersistencySwiftUI;
+			packageProductDependencies = (
+				FC1F7BB1299C7A7800070BC8 /* Alamofire */,
+			);
 			productName = ARPersistencySwiftUI;
 			productReference = FCB1BEF829946D28000EDF28 /* ARPersistencySwiftUI.app */;
 			productType = "com.apple.product-type.application";
@@ -148,6 +192,9 @@
 				Base,
 			);
 			mainGroup = FCB1BEEF29946D28000EDF28;
+			packageReferences = (
+				FC1F7BB0299C7A7800070BC8 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			productRefGroup = FCB1BEF929946D28000EDF28 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -177,12 +224,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCBE260D299F153500EAD292 /* EditorTableViewCell.swift in Sources */,
 				FCB1BEFE29946D28000EDF28 /* ContentView.swift in Sources */,
+				FCBE2609299F137B00EAD292 /* EditorViewController.swift in Sources */,
 				FC116548299B556600FE2FAF /* Utilities.swift in Sources */,
 				FCB1BEFC29946D28000EDF28 /* AppDelegate.swift in Sources */,
 				FC11653F299B527000FE2FAF /* CoreData.xcdatamodeld in Sources */,
 				FCB1BF0029946D28000EDF28 /* Experience.rcproject in Sources */,
+				FC1F7BAF299C783C00070BC8 /* Network.swift in Sources */,
 				FCB1BF1229947476000EDF28 /* ARViewController.swift in Sources */,
+				FCBE260F299F2E6900EAD292 /* Params.swift in Sources */,
+				FC1F7BB5299C8A2B00070BC8 /* ARLocation.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,6 +437,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC1F7BB0299C7A7800070BC8 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC1F7BB1299C7A7800070BC8 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC1F7BB0299C7A7800070BC8 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		FC11653D299B527000FE2FAF /* CoreData.xcdatamodeld */ = {

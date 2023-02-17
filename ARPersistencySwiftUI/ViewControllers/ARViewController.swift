@@ -21,6 +21,7 @@ class ARViewController: UIViewController, ARSessionDelegate {
     @IBOutlet var arView: ARView!
     
     var model = Entity()
+    let network = Network.shared
     var anchorMetaData = Set<UUID>()
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
@@ -68,29 +69,70 @@ class ARViewController: UIViewController, ARSessionDelegate {
     // MARK: - Persistence: Saving and Loading
     
     @IBAction func loadButton(_ sender: Any) {
-        // Load screenshot on screen
+//        self.network.getARWorldMap()
+//        // Load screenshot on screen
+//        do {
+//            let items = try context.fetch(Screenshot.fetchRequest())
+//            DispatchQueue.main.async {
+//                self.imageView.image = UIImage(data: items.last!.screenshot!)
+//                self.imageView.isHidden = false
+//            }
+//        } catch {
+//            print("Unable to load Screenshot")
+//        }
+//        // Load world map to scene
+//        let worldMap: ARWorldMap = {
+//            guard let data = mapDataFromFile
+//                else { fatalError("Map data should already be verified to exist before Load button is enabled.") }
+//            do {
+//                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
+//                    else { fatalError("No ARWorldMap in archive.") }
+//                return worldMap
+//            } catch {
+//                fatalError("Can't unarchive ARWorldMap from file data: \(error)")
+//            }
+//        }()
+//        // Reset arView to loaded state
+//        let configuration = self.defaultConfiguration // this app's standard world tracking settings
+//        configuration.initialWorldMap = worldMap
+//        arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+//        self.isRelocalizingMap = true
+        self.loadAltern()
+    }
+    
+    private func loadAltern() {
+        let urlS = "http://192.168.1.236:8080/" + self.network.locations.first!.screenshot
+        let url = URL(string: urlS)
+        let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+        imageView.image = UIImage(data: data!)
+        imageView.isHidden = false
+
+//        if self.network.downloadedData.isEmpty {
+//            return
+//        }
+        
+        var data2 = Data()
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         do {
-            let items = try context.fetch(Screenshot.fetchRequest())
-            DispatchQueue.main.async {
-                self.imageView.image = UIImage(data: items.last!.screenshot!)
-                self.imageView.isHidden = false
-            }
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+            // process files
+            data2 = try Data(contentsOf: fileURLs.last!)
+            print(fileURLs)
         } catch {
-            print("Unable to load Screenshot")
+            print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
-        // Load world map to scene
+        
         let worldMap: ARWorldMap = {
-            guard let data = mapDataFromFile
-                else { fatalError("Map data should already be verified to exist before Load button is enabled.") }
             do {
-                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data)
-                    else { fatalError("No ARWorldMap in archive.") }
+                guard let worldMap = try NSKeyedUnarchiver.unarchivedObject(ofClass: ARWorldMap.self, from: data2)
+                else { fatalError("No ARWorldMap in archive.") }
                 return worldMap
             } catch {
                 fatalError("Can't unarchive ARWorldMap from file data: \(error)")
             }
         }()
-        // Reset arView to loaded state
+
         let configuration = self.defaultConfiguration // this app's standard world tracking settings
         configuration.initialWorldMap = worldMap
         arView.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
@@ -102,6 +144,7 @@ class ARViewController: UIViewController, ARSessionDelegate {
         self.saveButton.isEnabled = false
         // Save screenshot
         arView.snapshot(saveToHDR: false) { image in
+            let param1 = image
             // Compress the image
             let compressedImage = UIImage(data: (image?.pngData())!)
             // Save in CoreData
@@ -112,22 +155,22 @@ class ARViewController: UIViewController, ARSessionDelegate {
             } catch {
                 print("Unable to save image into CoreData")
             }
-        }
-        // Save world map
-        arView.session.getCurrentWorldMap { worldMap, error in
-            guard let map = worldMap
-                else { self.showAlert(title: "Can't get current world map", message: error!.localizedDescription); return }
-            
-            // Add a snapshot image indicating where the map was captured.
-            // Capture Screenshot
-            do {
-                let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
-                try data.write(to: self.mapSaveURL, options: [.atomic])
-                DispatchQueue.main.async {
-                    self.loadButton.isEnabled = true
+            // Save world map
+            self.arView.session.getCurrentWorldMap { worldMap, error in
+                guard let map = worldMap
+                    else { self.showAlert(title: "Can't get current world map", message: error!.localizedDescription); return }
+                // Add a snapshot image indicating where the map was captured.
+                // Capture Screenshot
+                do {
+                    let data = try NSKeyedArchiver.archivedData(withRootObject: map, requiringSecureCoding: true)
+                    try data.write(to: self.mapSaveURL, options: [.atomic])
+                    self.network.uploadImage(image1: param1!, arWorldMap: data)
+                    DispatchQueue.main.async {
+                        self.loadButton.isEnabled = true
+                    }
+                } catch {
+                    fatalError("Can't save map: \(error.localizedDescription)")
                 }
-            } catch {
-                fatalError("Can't save map: \(error.localizedDescription)")
             }
         }
     }

@@ -23,7 +23,7 @@ struct StoryBoardView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> some UIViewController {
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
-        let controller = storyboard.instantiateViewController(identifier: "AR")
+        let controller = storyboard.instantiateViewController(identifier: "editor")
         return controller
     }
     
