@@ -70,11 +70,8 @@ class ARViewController: UIViewController, ARSessionDelegate {
     // MARK: - Persistence: Saving and Loading
     
     private func load() {
-        let urlS = Params.baseURL + self.location!.screenshot
-        let url = URL(string: urlS)
-        let dataImage = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
-        imageView.image = UIImage(data: dataImage!)
-        imageView.isHidden = false
+        let url = Params.baseURL + self.location!.screenshot
+        imageView.imageFromServerURL(url, placeHolder: nil)
 
         var data = Data()
         let fileManager = FileManager.default
@@ -172,8 +169,13 @@ class ARViewController: UIViewController, ARSessionDelegate {
         // Update the UI to provide feedback on the state of the AR experience.
         let message: String
         imageView.isHidden = true
-        if (prevState == true && trackingState == .normal) {
-            locationDetectedAlert()
+        if (prevState == true) {
+            switch (trackingState) {
+            case .normal:
+                locationDetectedAlert()
+            default:
+                print("")
+            }
         }
         switch (trackingState, frame.worldMappingStatus) {
         case (.normal, .mapped),
