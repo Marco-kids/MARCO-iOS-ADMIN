@@ -95,7 +95,6 @@ class Network {
                 self.downloadedData.append(data)
                 for i in self.locations.indices {
                     if self.locations[i].nombre == location.nombre {
-                        print(response.fileURL as Any)
                         self.locations[i].locationPath = response.fileURL
                         guard let delegateEditor = self.delegateARVC else { return }
                         delegateEditor.loadedData(locations: self.locations)

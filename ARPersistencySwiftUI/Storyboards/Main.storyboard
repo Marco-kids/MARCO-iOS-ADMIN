@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DE5-Fl-pLi">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="DE5-Fl-pLi">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="190" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="rQp-EH-E7T">
-                                <rect key="frame" x="0.0" y="103" width="393" height="635"/>
+                                <rect key="frame" x="0.0" y="103" width="393" height="715"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="cell" rowHeight="190" id="S6M-z1-Tix" customClass="EditorTableViewCell" customModule="ARPersistencySwiftUI" customModuleProvider="target">
@@ -50,44 +51,13 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <stackView opaque="NO" contentMode="scaleToFill" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Fgj-s7-pUf">
-                                <rect key="frame" x="16" y="753" width="361" height="55"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fjd-2T-nh9">
-                                        <rect key="frame" x="0.0" y="0.0" width="173" height="55"/>
-                                        <color key="backgroundColor" systemColor="systemRedColor"/>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Reset"/>
-                                        <connections>
-                                            <action selector="resetButton:" destination="te0-Qk-omY" eventType="touchUpInside" id="5NS-Ij-kVR"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e6j-Ee-ge5">
-                                        <rect key="frame" x="188" y="0.0" width="173" height="55"/>
-                                        <color key="backgroundColor" systemColor="systemGreenColor"/>
-                                        <color key="tintColor" systemColor="labelColor"/>
-                                        <state key="normal" title="Button"/>
-                                        <buttonConfiguration key="configuration" style="plain" title="Save"/>
-                                        <connections>
-                                            <action selector="saveButton:" destination="te0-Qk-omY" eventType="touchUpInside" id="SUs-Bw-Mx7"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="55" id="aya-Pt-DpX"/>
-                                </constraints>
-                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="rQp-EH-E7T" secondAttribute="trailing" id="C1e-Hx-WrY"/>
-                            <constraint firstItem="36F-6s-U7J" firstAttribute="top" secondItem="Fgj-s7-pUf" secondAttribute="bottom" constant="10" id="OyR-8x-wsx"/>
                             <constraint firstItem="rQp-EH-E7T" firstAttribute="top" secondItem="16r-hZ-c1i" secondAttribute="bottom" id="Yh1-1J-mbK"/>
-                            <constraint firstItem="Fgj-s7-pUf" firstAttribute="leading" secondItem="8Uo-UJ-QTA" secondAttribute="leadingMargin" id="dRd-eJ-AX4"/>
                             <constraint firstItem="rQp-EH-E7T" firstAttribute="leading" secondItem="8Uo-UJ-QTA" secondAttribute="leading" id="kv3-5W-aFC"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Fgj-s7-pUf" secondAttribute="trailing" id="l6V-Jr-z5r"/>
-                            <constraint firstItem="Fgj-s7-pUf" firstAttribute="top" secondItem="rQp-EH-E7T" secondAttribute="bottom" constant="15" id="zai-2y-bfX"/>
+                            <constraint firstItem="36F-6s-U7J" firstAttribute="top" secondItem="rQp-EH-E7T" secondAttribute="bottom" id="qqm-eS-3h0"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="apV-U8-V6T">
@@ -98,8 +68,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="resetButton" destination="Fjd-2T-nh9" id="0iO-V1-VFG"/>
-                        <outlet property="saveButton" destination="e6j-Ee-ge5" id="gtT-D0-hys"/>
                         <outlet property="tableView" destination="rQp-EH-E7T" id="gFW-rc-3Ig"/>
                         <segue destination="Y6W-OH-hqX" kind="show" identifier="addSegue" id="0gF-D2-zA7"/>
                         <segue destination="Y6W-OH-hqX" kind="show" identifier="loadSegue" id="0b1-aE-KqE"/>
@@ -217,14 +185,8 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
-        <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
         <systemColor name="systemIndigoColor">
             <color red="0.34509803921568627" green="0.33725490196078434" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-        <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

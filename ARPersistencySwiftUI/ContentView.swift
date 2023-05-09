@@ -9,16 +9,11 @@ import SwiftUI
 
 struct ContentView : View {
     var body: some View {
-        #if !targetEnvironment(simulator)
         StoryBoardView()
             .ignoresSafeArea(.all)
-        #else
-        Text("Hello World!")
-        #endif
     }
 }
 
-#if !targetEnvironment(simulator)
 struct StoryBoardView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> some UIViewController {
@@ -31,7 +26,6 @@ struct StoryBoardView: UIViewControllerRepresentable {
         
     }
 }
-#endif
 
 #if DEBUG
 struct ContentView_Previews : PreviewProvider {

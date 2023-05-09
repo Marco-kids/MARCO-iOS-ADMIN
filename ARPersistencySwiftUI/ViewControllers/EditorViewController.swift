@@ -13,9 +13,6 @@ protocol EditorViewControllerDelegate: AnyObject {
 
 class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditorViewControllerDelegate {
     
-    
-    @IBOutlet weak var resetButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
     var locations: [ARLocation] = []
     let network = Network.shared
@@ -26,10 +23,6 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
         tableView.delegate = self
         tableView.dataSource = self
         network.delegateARVC = self
-        resetButton.layer.cornerRadius = resetButton.layer.frame.height / 2
-        resetButton.clipsToBounds = true
-        saveButton.layer.cornerRadius = saveButton.layer.frame.height / 2
-        saveButton.clipsToBounds = true
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
         tableView.addSubview(refreshControl)
     }
@@ -57,12 +50,6 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     // MARK: UIButtons
     
-    @IBAction func saveButton(_ sender: UIButton) {
-    }
-    
-    @IBAction func resetButton(_ sender: UIButton) {
-    }
-    
     @IBAction func didTapAdd(_ sender: UIBarButtonItem) {
         performSegue(withIdentifier: "addSegue", sender: nil)
     }
@@ -78,11 +65,13 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        #if !targetEnvironment(simulator)
         if segue.identifier == "loadSegue"{
             let destination = segue.destination as! ARViewController
             let indexPath = sender as! IndexPath
             destination.location = self.locations[indexPath.row]
         }
+        #endif
     }
 
 }
