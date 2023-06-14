@@ -51,7 +51,8 @@ class Network {
             switch response.result {
             case .success(let value):
                 do {
-                    let arLocation = try JSONDecoder().decode([ARLocation].self, from: response.data!)
+                    var arLocation = try JSONDecoder().decode([ARLocation].self, from: response.data!)
+                    arLocation = arLocation.suffix(10)
                     self.locations = arLocation
                     guard let delegateEditor = delegateARVC else { return }
                     delegateEditor.loadedData(locations: arLocation)
@@ -70,8 +71,10 @@ class Network {
     func getARWordlMap(location: ARLocation) {
         let fileName = location.ARWorldMap.components(separatedBy: "/").last
         let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let filePathToSearch = documentsURL.relativePath + "/" + fileName!
+        let documentsURL = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)[0]
+        var filePathToSearch = documentsURL.relativePath + "/" + fileName!
+        filePathToSearch = filePathToSearch.replacingOccurrences(of: "\\", with: "/")
+        filePathToSearch = filePathToSearch.replacingOccurrences(of: "uploads/", with: "")
         let filePathToSearchURL = URL(string: "file://" + filePathToSearch)
         if fileManager.fileExists(atPath: filePathToSearch) {
             for i in self.locations.indices {
@@ -87,8 +90,9 @@ class Network {
     }
     
     func downloadARWorldMap(location: ARLocation) {
-        let destination = DownloadRequest.suggestedDownloadDestination(for: .documentDirectory)
-        AF.download(Params.baseURL + location.ARWorldMap, to: destination).responseData { response in
+        let destination = DownloadRequest.suggestedDownloadDestination(for: .cachesDirectory)
+        let url = location.ARWorldMap.replacingOccurrences(of: "\\", with: "/")
+        AF.download(Params.baseURL + url, to: destination).responseData { response in
             if let error = response.error {
                 print("Error downloading file: \(error)")
             } else if let data = response.value {

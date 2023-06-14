@@ -3,7 +3,7 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -112,14 +112,14 @@
                                 </constraints>
                             </stackView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dJn-jG-Bmo">
-                                <rect key="frame" x="16" y="103" width="158" height="269"/>
+                                <rect key="frame" x="0.0" y="103" width="140" height="220"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="269" id="PJs-kQ-mNM"/>
-                                    <constraint firstAttribute="width" constant="158" id="eFV-AM-8gI"/>
+                                    <constraint firstAttribute="height" constant="220" id="CFL-Ls-6jm"/>
+                                    <constraint firstAttribute="width" constant="140" id="U3t-X1-BoA"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HrA-HY-jHw">
-                                <rect key="frame" x="21" y="670" width="351" height="78"/>
+                                <rect key="frame" x="21" y="731" width="351" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -131,12 +131,11 @@
                             <constraint firstAttribute="bottom" secondItem="eKW-US-Wis" secondAttribute="bottom" id="9Np-St-Lte"/>
                             <constraint firstAttribute="trailingMargin" secondItem="tcv-wh-Khm" secondAttribute="trailing" constant="5" id="AXS-hZ-ek4"/>
                             <constraint firstItem="tcv-wh-Khm" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leadingMargin" constant="5" id="EgJ-yJ-sL1"/>
-                            <constraint firstItem="dJn-jG-Bmo" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" constant="16" id="JdS-n1-2RL"/>
+                            <constraint firstItem="dJn-jG-Bmo" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="JdS-n1-2RL"/>
                             <constraint firstItem="tcv-wh-Khm" firstAttribute="top" secondItem="HrA-HY-jHw" secondAttribute="bottom" constant="15" id="KYg-Ts-uOY"/>
                             <constraint firstItem="eKW-US-Wis" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leading" id="KYv-p5-GfY"/>
                             <constraint firstItem="R6o-cc-HpM" firstAttribute="top" secondItem="tcv-wh-Khm" secondAttribute="bottom" constant="5" id="Kzw-5F-eqI"/>
                             <constraint firstAttribute="trailingMargin" secondItem="HrA-HY-jHw" secondAttribute="trailing" constant="5" id="L5r-UW-Mrj"/>
-                            <constraint firstItem="HrA-HY-jHw" firstAttribute="top" secondItem="dJn-jG-Bmo" secondAttribute="bottom" constant="298" id="Qs5-Jd-uv3"/>
                             <constraint firstItem="dJn-jG-Bmo" firstAttribute="top" secondItem="0wo-i1-Y0Y" secondAttribute="bottom" id="a01-N5-c7U"/>
                             <constraint firstItem="HrA-HY-jHw" firstAttribute="leading" secondItem="5EZ-qb-Rvc" secondAttribute="leadingMargin" constant="5" id="eIp-oX-14A"/>
                             <constraint firstItem="eKW-US-Wis" firstAttribute="top" secondItem="5EZ-qb-Rvc" secondAttribute="top" id="oyM-4C-JB5"/>

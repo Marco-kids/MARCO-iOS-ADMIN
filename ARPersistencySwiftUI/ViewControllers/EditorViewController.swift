@@ -59,6 +59,7 @@ class EditorViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func loadedData(locations: [ARLocation]) {
         refreshControl.endRefreshing()
         self.locations = locations
+        self.locations.reverse()
         self.tableView.reloadData()
     }
     
